@@ -1,0 +1,19 @@
+import io
+import datetime
+from flask import Flask, request, send_file
+from .screenshot import Screenshot
+
+app = Flask(__name__)
+app.run(host='0.0.0.0')
+
+
+@app.route('/')
+def screenshot():
+    url = request.args.get('url', None)
+    if url:
+        s = Screenshot(url)
+        png = s.get_image()
+        name = "%s.png" % str(datetime.datetime.now().time())
+        return send_file(io.BytesIO(png), mimetype='image/png', as_attachment=True, attachment_filename=name)
+
+    return 'Error'
