@@ -4,7 +4,6 @@ from flask import Flask, request, send_file
 from .screenshot import Screenshot
 
 app = Flask(__name__)
-app.run(host='0.0.0.0')
 
 
 @app.route('/')
@@ -17,3 +16,7 @@ def screenshot():
         return send_file(io.BytesIO(png), mimetype='image/png', as_attachment=True, attachment_filename=name)
 
     return 'Error'
+
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', debug=True)

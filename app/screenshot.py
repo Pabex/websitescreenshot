@@ -5,7 +5,7 @@ from selenium.webdriver.chrome.options import Options
 
 
 class Screenshot:
-    def __init__(self, url, delay=1):
+    def __init__(self, url, delay=2):
         self.url = url
         self.delay = delay
         options = Options()
