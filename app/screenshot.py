@@ -16,19 +16,16 @@ class Screenshot:
     def save_image(self):
         self.driver.get(self.url)
         time.sleep(self.delay)
-
         self.driver.get_screenshot_as_file('screenshot_%s.png' % str(int(time.time())))
+        self.driver.quit()
         return True
 
     def get_image(self):
         self.driver.get(self.url)
         time.sleep(self.delay)
         png = self.driver.get_screenshot_as_png()
+        self.driver.quit()
         return png
-
-    def __del__(self):
-        if self.driver:
-            self.driver.quit()
 
 
 if __name__ == '__main__':
