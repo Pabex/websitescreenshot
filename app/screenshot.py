@@ -18,7 +18,6 @@ class Screenshot:
         time.sleep(self.delay)
 
         self.driver.get_screenshot_as_file('screenshot_%s.png' % str(int(time.time())))
-        self.driver.quit()
         return True
 
     def get_image(self):
@@ -26,6 +25,10 @@ class Screenshot:
         time.sleep(self.delay)
         png = self.driver.get_screenshot_as_png()
         return png
+
+    def __del__(self):
+        if self.driver:
+            self.driver.quit()
 
 
 if __name__ == '__main__':
