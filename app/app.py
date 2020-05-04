@@ -12,10 +12,11 @@ def screenshot():
     if url:
         s = Screenshot(url)
         png = s.get_image()
-        name = "%s.png" % str(datetime.datetime.now().time())
-        return send_file(io.BytesIO(png), mimetype='image/png', as_attachment=True, attachment_filename=name)
+        if png:
+            name = "%s.png" % str(datetime.datetime.now().time())
+            return send_file(io.BytesIO(png), mimetype='image/png', as_attachment=True, attachment_filename=name)
 
-    return 'Error'
+    return 'Error', 404
 
 
 if __name__ == '__main__':
