@@ -19,7 +19,7 @@ class Screenshot:
         options.add_argument("--disable-browser-side-navigation")
         options.add_argument("--disable-gpu")
         self.driver = webdriver.Chrome('../chromedriver/chromedriver', options=options)
-        self.driver.set_page_load_timeout(10)
+        self.driver.set_page_load_timeout(20)
 
     def save_image(self):
         self.driver.get(self.url)
