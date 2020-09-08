@@ -1,7 +1,10 @@
+import io
 import sys
 import time
+import imagehash
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from PIL import Image
 
 
 class Screenshot:
@@ -21,6 +24,10 @@ class Screenshot:
         self.driver = webdriver.Chrome('../chromedriver/chromedriver', options=options)
         self.driver.set_page_load_timeout(20)
 
+        # Imagen en blanco
+        white_image = Image.new("RGB", (100, 100), (255, 255, 255))
+        self.hash_white_image = imagehash.average_hash(white_image)
+
     def save_image(self):
         self.driver.get(self.url)
         time.sleep(self.delay)
@@ -34,11 +41,20 @@ class Screenshot:
             time.sleep(self.delay)
             png = self.driver.get_screenshot_as_png()
             self.driver.quit()
+            if self.__is_white_image(png):
+                return False
             return png
         except Exception as e:
             print("Error en %s: " % self.url, str(e))
             self.driver.quit()
         return False
+
+    def __is_white_image(self, bytes_image) -> bool:
+        is_white = False
+        with Image.open(io.BytesIO(bytes_image)) as image:
+            hash_image = imagehash.average_hash(image)
+            is_white = (self.hash_white_image - hash_image) == 0
+        return is_white
 
 
 if __name__ == '__main__':
