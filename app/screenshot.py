@@ -5,6 +5,7 @@ import imagehash
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from PIL import Image
+from urllib.parse import unquote
 
 
 class Screenshot:
@@ -21,6 +22,7 @@ class Screenshot:
         options.add_argument("--disable-dev-shm-usage")
         options.add_argument("--disable-browser-side-navigation")
         options.add_argument("--disable-gpu")
+        options.add_argument('--dns-prefetch-disable')  # https://sqa.stackexchange.com/a/17955
         self.driver = webdriver.Chrome('../chromedriver/chromedriver', options=options)
         self.driver.set_page_load_timeout(20)
 
