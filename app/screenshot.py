@@ -24,7 +24,7 @@ class Screenshot:
         options.add_argument("--disable-gpu")
         options.add_argument('--dns-prefetch-disable')  # https://sqa.stackexchange.com/a/17955
         self.driver = webdriver.Chrome('../chromedriver/chromedriver', options=options)
-        self.driver.set_page_load_timeout(20)
+        self.driver.set_page_load_timeout(30)
 
         # Imagen en blanco
         white_image = Image.new("RGB", (100, 100), (255, 255, 255))
