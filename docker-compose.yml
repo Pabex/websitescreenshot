@@ -4,3 +4,4 @@ services:
     build: .
     ports:
       - "5010:5010"
+    init: true
