@@ -23,6 +23,7 @@ class Screenshot:
         options.add_argument("--disable-browser-side-navigation")
         options.add_argument("--disable-gpu")
         options.add_argument('--dns-prefetch-disable')  # https://sqa.stackexchange.com/a/17955
+        options.add_argument("user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36")
         self.driver = webdriver.Chrome('../chromedriver/chromedriver', options=options)
         self.driver.set_window_size(1280, 720)
         self.driver.set_page_load_timeout(30)
