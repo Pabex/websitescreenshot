@@ -2,3 +2,4 @@
 environment
 *.pyc
 *.png
+app/data_chrome

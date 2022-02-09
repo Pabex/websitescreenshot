@@ -13,11 +13,12 @@ from PIL import Image
 
 
 class Screenshot:
-    def __init__(self, url, delay=2):
+    def __init__(self, url, delay=2, headless=True):
         self.url = url
         self.delay = delay
         options = Options()
-        options.add_argument("--headless")
+        if headless:
+            options.add_argument("--headless")
         options.add_argument("--start-maximized")
         # https://stackoverflow.com/a/52340526/6696848
         options.add_argument("enable-automation")
@@ -77,7 +78,9 @@ class Screenshot:
             email = os.environ.get("EMAIL_FACEBOOK")
             password = os.environ.get("PASSWORD_FACEBOOK")
             time.sleep(4)
+            txt_email.clear()
             txt_email.send_keys(email)
+
             txt_password.send_keys(password)
             txt_password.send_keys(Keys.ENTER)
             time.sleep(2)
