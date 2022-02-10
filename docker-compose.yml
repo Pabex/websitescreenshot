@@ -4,4 +4,10 @@ services:
     build: .
     ports:
       - "5010:5010"
-    init: true
+    environment:
+      - EMAIL_FACEBOOK=
+      - PASSWORD_FACEBOOK=
+      - EMAIL_INSTAGRAM=
+      - PASSWORD_INSTAGRAM=
+    volumes:
+      - ./app/data_chrome:/usr/src/app/data_chrome
