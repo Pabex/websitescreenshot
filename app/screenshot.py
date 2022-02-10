@@ -73,6 +73,7 @@ class Screenshot:
         time.sleep(6)
 
         def login_facebook():
+            print(f"[INFO] Login facebook.")
             txt_email = self.driver.find_element(By.ID, "email")
             txt_password = self.driver.find_element(By.ID, "pass")
             email = os.environ.get("EMAIL_FACEBOOK")
@@ -80,7 +81,7 @@ class Screenshot:
             time.sleep(4)
             txt_email.clear()
             txt_email.send_keys(email)
-
+            time.sleep(2)
             txt_password.send_keys(password)
             txt_password.send_keys(Keys.ENTER)
             time.sleep(2)
@@ -92,14 +93,18 @@ class Screenshot:
         if len(self.driver.find_elements(By.ID, "email")) > 0 and len(self.driver.find_elements(By.ID, "pass")) > 0:
             # Esta en el login, tenemos que iniciar sesion.
             login_facebook()
+            time.sleep(2)
         elif len(self.driver.find_elements(By.CSS_SELECTOR, "div[aria-label='No iniciaste sesión'")) > 0:
+            print(f"[INFO] Modal de No iniciaste sesión.")
             self.driver.get("https://www.facebook.com")
             WebDriverWait(self.driver, 20).until(EC.presence_of_element_located((By.ID, "email")))
             login_facebook()
             self.driver.get(self.url)
-        elif "Escribe tu contraseña" in self.driver.page_source:
             time.sleep(3)
-            txt_password = self.driver.find_element(By.ID, "pass")
+        elif "Escribe tu contraseña" in self.driver.page_source:
+            print(f"[INFO] Escribe tu contraseña.")
+            time.sleep(3)
+            txt_password = self.driver.find_element(By.NAME, "pass")
             password = os.environ.get("PASSWORD_FACEBOOK")
             txt_password.send_keys(password)
             txt_password.send_keys(Keys.ENTER)
