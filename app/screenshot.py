@@ -13,8 +13,7 @@ from PIL import Image
 
 
 class Screenshot:
-    def __init__(self, url, delay=2, headless=True):
-        self.url = url
+    def __init__(self, delay=2, headless=True):
         self.delay = delay
         options = Options()
         if headless:
@@ -31,7 +30,7 @@ class Screenshot:
         options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36")
         prefs = {"profile.default_content_setting_values.notifications": 2}
         options.add_experimental_option("prefs", prefs)
-        options.add_argument("user-data-dir=data_chrome")
+        options.add_argument("--user-data-dir=data_chrome")
         self.driver = webdriver.Chrome('../chromedriver/chromedriver', options=options)
         self.driver.set_window_size(1280, 720)
         self.driver.set_page_load_timeout(30)
@@ -40,36 +39,28 @@ class Screenshot:
         white_image = Image.new("RGB", (100, 100), (255, 255, 255))
         self.hash_white_image = imagehash.average_hash(white_image)
 
-    def save_image(self):
-        self.driver.get(self.url)
-        time.sleep(self.delay)
-        self.driver.get_screenshot_as_file('screenshot_%s.png' % str(int(time.time())))
-        self.driver.quit()
-        return True
-
-    def get_image(self):
+    def get_image(self, url: str):
         png = None
         try:
-            if "facebook.com" in self.url:
-                png = self.facebook()
-            elif "instagram.com" in self.url:
-                png = self.instagram()
+            if "facebook.com" in url:
+                png = self.facebook(url)
+            elif "instagram.com" in url:
+                png = self.instagram(url)
             else:
-                self.driver.get(self.url)
+                self.driver.get(url)
                 time.sleep(self.delay)
                 png = self.driver.get_screenshot_as_png()
-            self.driver.quit()
+
             if self.__is_white_image(png):
                 return False
             return png
         except Exception as e:
-            print("Error en %s: " % self.url, str(e))
-            self.driver.quit()
+            print("Error en %s: " % url, str(e))
         return png
 
-    def facebook(self):
+    def facebook(self, url: str):
         self.driver.set_page_load_timeout(60)
-        self.driver.get(self.url)
+        self.driver.get(url)
         time.sleep(6)
 
         def login_facebook():
@@ -99,7 +90,7 @@ class Screenshot:
             self.driver.get("https://www.facebook.com")
             WebDriverWait(self.driver, 20).until(EC.presence_of_element_located((By.ID, "email")))
             login_facebook()
-            self.driver.get(self.url)
+            self.driver.get(url)
             time.sleep(3)
         elif "Escribe tu contraseña" in self.driver.page_source:
             print(f"[INFO] Escribe tu contraseña.")
@@ -113,9 +104,9 @@ class Screenshot:
         png = self.driver.get_screenshot_as_png()
         return png
 
-    def instagram(self):
+    def instagram(self, url: str):
         self.driver.set_page_load_timeout(60)
-        self.driver.get(self.url)
+        self.driver.get(url)
         time.sleep(6)
 
         email_instagram = os.environ.get("EMAIL_INSTAGRAM")
@@ -143,9 +134,3 @@ class Screenshot:
             hash_image = imagehash.average_hash(image)
             is_white = (self.hash_white_image - hash_image) == 0
         return is_white
-
-
-if __name__ == '__main__':
-    url = sys.argv[1]
-    screenshot = Screenshot(url)
-    screenshot.save_image()
